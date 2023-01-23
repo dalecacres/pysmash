@@ -46,28 +46,35 @@ class KeyboardController(Controller):
 
         # Support for keeping a key held down
         if self.player.attack_cooldown == 0 or \
-            self.player.attack == "tilt":
+            self.player.attack == "neutral_tilt":
             keys = pygame.key.get_pressed()
             if keys[pygame.K_LEFT]:
                 self.player.left()
             if keys[pygame.K_RIGHT]:
                 self.player.right()
-
+            # if (keys[pygame.K_UP] or keys[pygame.K_SPACE]) and self.player.jump_pressed:
+                # self.player.jump()
+            # elif keys[pygame.K_UP] or keys[pygame.K_SPACE]:
+                # self.player.begin_jump()
+                # self.player.jump_pressed = True 
+            if keys[pygame.K_COMMA]:
+                self.player.neutral_b()
+            # if not keys[pygame.K_UP] and not keys[pygame.K_SPACE]:
+                # self.player.jump_pressed = False
+            if keys[pygame.K_PERIOD] and keys[pygame.K_UP]:
+                self.player.up_smash()
+            elif keys[pygame.K_PERIOD]:
+                self.player.neutral_smash()
+            if keys[pygame.K_SLASH] and not self.player.isGrounded:
+                self.player.aerial()
+            if keys[pygame.K_SLASH] and self.player.isGrounded:
+                self.player.neutral_tilt()
         # Keys that must be repressed
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-            if event.type == pygame.KEYDOWN:
-                if event.key in [pygame.K_UP, pygame.K_SPACE]:
-                    self.player.jump()
-                elif event.key == pygame.K_SLASH:
-                    if self.player.attack_cooldown == 0:
-                        self.player.tilt()
-                elif event.key == pygame.K_PERIOD:
-                    if self.player.attack_cooldown == 0:
-                        self.player.smash()
-                else:
-                    pygame.event.post(event)
+            else:
+                pygame.event.post(event)
         self.player.move()
 
 
@@ -83,12 +90,19 @@ class KeyboardController2(Controller):
         self.player.gravity()
         # Support for keeping a key held down
         if self.player.attack_cooldown == 0 or \
-            self.player.attack == "tilt":
+            self.player.attack == "neutral_tilt":
             keys = pygame.key.get_pressed()
             if keys[pygame.K_a]:
                 self.player.left()
             if keys[pygame.K_d]:
                 self.player.right()
+            if keys[pygame.K_w] and self.player.jump_pressed:
+                self.player.jump()
+            elif keys[pygame.K_w]:
+                self.player.begin_jump()
+                self.player.jump_pressed = True 
+            if not keys[pygame.K_w]:
+                self.player.jump_pressed = False
 
         # Keys that must be repressed
         for event in pygame.event.get():
@@ -97,9 +111,7 @@ class KeyboardController2(Controller):
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
                     elif event.key == pygame.K_1:
-                        self.player.tilt()
+                        self.player.neutral_tilt()
                     elif event.key == pygame.K_2:
-                        self.player.smash()
-                if event.key == pygame.K_w:
-                    self.player.jump()
+                        self.player.neutral_smash()
         self.player.move()
