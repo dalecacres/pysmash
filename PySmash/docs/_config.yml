@@ -1,0 +1,17 @@
+title: PySmash
+remote_theme: hydecorp/hydejack
+
+menu:
+  - title: Home
+    url: /
+  - title: About Us
+    url: /about/
+  - title: Documentation
+    url: /docs/
+
+author:
+  social:
+    github: olincollege/pysmash
+
+plugins:
+  - jekyll-include-cache
