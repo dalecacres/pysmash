@@ -67,26 +67,23 @@ class WindowView(CharaterView):
         # pygame.draw.rect(self.screen, (255,0,0), self.game.player1.rect, 1)
         self.game.all_sprites.draw(self.screen)
         color = (255, 255, 255)
-        small_font = pygame.font.SysFont("Corbel", 35)
-        p1_line1 = small_font.render(f"Player 1 " + \
-        f"{self._game.player1.name.capitalize()}:", True, color)
-        p1_line2 = small_font.render(
-            f"Damage: {self._game.player1.health} "
-            + f"Stock: {self._game.player1.stocks}",
-            True,
-            color,
-        )
-        p2_line1 = small_font.render(f"Player 2 " + \
-        f"{self._game.player2.name.capitalize()}:", True, color)
-        p2_line2 = small_font.render(
-            f"Damage: {self._game.player2.health} "
-            + f"Stock: {self._game.player2.stocks}",
-            True,
-            color,
-        )
+        small_font = pygame.font.SysFont("Corbel", 20)
+        medium_font = pygame.font.SysFont("Corbel", 35)
+        p1_line1 = small_font.render(f"Player 1 ", True, color)
+        p1_line2 = small_font.render(f"{self._game.player1.name.capitalize()}:", True, color)
+        p1_line3 = medium_font.render(f"{self._game.player1.health} %", True, color)
+        p1_line4 = medium_font.render(f"•" * self._game.player1.stocks, True, color)
+        p2_line1 = small_font.render(f"Player 2 ", True, color)
+        p2_line2 = small_font.render(f"{self._game.player2.name.capitalize()}:", True, color)
+        p2_line3 = medium_font.render(f"{self._game.player2.health} %", True, color)
+        p2_line4 = medium_font.render(f"•" * self._game.player2.stocks, True, color)
         text_width, _ = small_font.size("Player 1")
-        self.screen.blit(p1_line1, (595 - 155 - text_width * 2.2, 600))
-        self.screen.blit(p1_line2, (595 - 155 - text_width * 2.2, 630))
-        self.screen.blit(p2_line1, (800, 600))
-        self.screen.blit(p2_line2, (800, 630))
+        self.screen.blit(p1_line1, (395 - 155 - text_width * 2.2, 600))
+        self.screen.blit(p1_line2, (395 - 155 - text_width * 2.2, 620))
+        self.screen.blit(p1_line3, (395 - 155 - text_width * 2.2, 640))
+        self.screen.blit(p1_line4, (395 - 155 - text_width * 2.2, 670))
+        self.screen.blit(p2_line1, (1000, 600))
+        self.screen.blit(p2_line2, (1000, 620))
+        self.screen.blit(p2_line3, (1000, 640))
+        self.screen.blit(p2_line4, (1000, 670))
         pygame.display.flip()
