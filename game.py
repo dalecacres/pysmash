@@ -5,7 +5,7 @@ import pygame
 from view import WindowView
 from controller import KeyboardController, KeyboardController2
 from stages.final_destination import FinalDestination
-
+from stages.battlefield import Battlefield
 
 class Game:
     """
@@ -36,7 +36,6 @@ class Game:
         """
         pygame.init()
         self.clock = pygame.time.Clock()
-
         if screen is not None:
             self.viewer = WindowView(self, screen)
 
@@ -45,8 +44,7 @@ class Game:
         self.p1controller = KeyboardController(self.player1)
         self.p2controller = KeyboardController2(self.player2)
         self.all_sprites = pygame.sprite.Group(self.player1, self.player2)
-
-        self.stage = FinalDestination()
+        self.stage = Battlefield()
         self.player1.platforms = self.stage.platforms
         self.player2.platforms = self.stage.platforms
 
@@ -61,7 +59,7 @@ class Game:
         ):
             # Check that we're under halfway through a smash
             if (
-                self.player1.attack == "smash"
+                self.player1.attack == "neutral_smash"
                 and self.player1.attack_cooldown
                 < self.player1.smash_cooldown / 2.0
             ) == False:
@@ -79,7 +77,7 @@ class Game:
         ):
             # Check that we're under halfway through a smash
             if (
-                self.player2.attack == "smash"
+                self.player2.attack == "neutral_smash"
                 and self.player2.attack_cooldown
                 < self.player2.smash_cooldown / 2.0
             ) == False:
@@ -103,6 +101,18 @@ class Game:
                 return "Player 1"
             self.p1controller.move()
             self.p2controller.move()
+            for projectile in self.player1.projectiles:
+                if not self.all_sprites.has(projectile):
+                    self.all_sprites.add(projectile)
+                    projectile.platforms = self.player2.platforms
+                projectile.gravity()
+                projectile.move()
+            for projectile in self.player2.projectiles:
+                if not self.all_sprites.has(projectile):
+                    self.all_sprites.add(projectile)
+                    projectile.platforms = self.player2.platforms
+                projectile.gravity()
+                projectile.move()
             self.check_attack()
             self.viewer.draw()
             self.clock.tick(60)
