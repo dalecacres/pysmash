@@ -7,7 +7,7 @@ from player import Player
 
 
 class Mario(Player):
-    """"""
+    """"
 Contains Class representing a player in PySmash
 """
 import abc
