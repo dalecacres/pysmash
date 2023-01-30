@@ -43,33 +43,47 @@ class KeyboardController(Controller):
         Takes keyboard input and moves Player object accordingly
         """
         self.player.gravity()
-
-        # Support for keeping a key held down
-        if self.player.attack_cooldown == 0 or \
-            self.player.attack == "neutral_tilt":
+        if self.player.attack_cooldown == 0:
             keys = pygame.key.get_pressed()
             if keys[pygame.K_LEFT]:
-                self.player.left()
+                self.player.move_left()
             if keys[pygame.K_RIGHT]:
-                self.player.right()
-            # if (keys[pygame.K_UP] or keys[pygame.K_SPACE]) and self.player.jump_pressed:
-                # self.player.jump()
-            # elif keys[pygame.K_UP] or keys[pygame.K_SPACE]:
-                # self.player.begin_jump()
-                # self.player.jump_pressed = True 
+                self.player.move_right()
+            if (keys[pygame.K_UP] or keys[pygame.K_SPACE]):
+                self.player.jump()
             if keys[pygame.K_COMMA]:
                 self.player.neutral_b()
-            # if not keys[pygame.K_UP] and not keys[pygame.K_SPACE]:
-                # self.player.jump_pressed = False
-            if keys[pygame.K_PERIOD] and keys[pygame.K_UP]:
-                self.player.up_smash()
-            elif keys[pygame.K_PERIOD]:
-                self.player.neutral_smash()
-            if keys[pygame.K_SLASH] and not self.player.isGrounded:
-                self.player.aerial()
             if keys[pygame.K_SLASH] and self.player.isGrounded:
                 self.player.neutral_tilt()
-        # Keys that must be repressed
+            if keys[pygame.K_PERIOD]:
+                self.player.neutral_smash()
+            if keys[pygame.K_SLASH] and not self.player.isGrounded:
+                self.player.neutral_aerial()
+            if keys[pygame.K_SLASH] and (keys[pygame.K_LEFT] or keys[pygame.K_RIGHT]) and not self.player.isGrounded:
+                self.player.forward_aerial()
+            if keys[pygame.K_SLASH] and keys[pygame.K_UP] and not self.player.isGrounded:
+                self.player.up_aerial()
+            if keys[pygame.K_SLASH] and not self.player.isGrounded:
+                self.player.down_aerial()
+            if keys[pygame.K_SLASH] and (keys[pygame.K_RIGHT] or keys[pygame.K_LEFT]) and self.player.isGrounded:  
+                self.player.forward_tilt() 
+            if keys[pygame.K_SLASH] and keys[pygame.K_UP] and self.player.isGrounded:
+                self.player.up_tilt()
+            if keys[pygame.K_SLASH] and keys[pygame.K_DOWN] and self.player.isGrounded:
+                self.player.down_tilt()
+            if keys[pygame.K_PERIOD] and (keys[pygame.K_RIGHT] or keys[pygame.K_LEFT]):
+                self.player.forward_smash()
+            if keys[pygame.K_PERIOD] and keys[pygame.K_UP]:
+                self.player.up_smash()
+            if keys[pygame.K_PERIOD] and keys[pygame.K_DOWN]:
+                self.player.down_smash()
+            if keys[pygame.K_COMMA] and (keys[pygame.K_LEFT] or keys[pygame.K_RIGHT]):
+                self.player.forward_b()
+            if keys[pygame.K_COMMA] and keys[pygame.K_UP]:
+                self.player.up_b()
+            if keys[pygame.K_COMMA] and keys[pygame.K_DOWN]:
+                self.player.down_b()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -93,9 +107,9 @@ class KeyboardController2(Controller):
             self.player.attack == "neutral_tilt":
             keys = pygame.key.get_pressed()
             if keys[pygame.K_a]:
-                self.player.left()
+                self.player.move_left()
             if keys[pygame.K_d]:
-                self.player.right()
+                self.player.move_right()
             if keys[pygame.K_w] and self.player.jump_pressed:
                 self.player.jump()
             elif keys[pygame.K_w]:
