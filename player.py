@@ -53,7 +53,7 @@ class Player(abc.ABC, pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.direction = None
         self._health = 0
-        self.image = self.images["left"]
+        self.image = self.animate["stand_left"]()
         self.rect = self.image.get_rect()
         self._stocks = 3
         self.hitbox = pygame.Rect(0, 0, 0, 0)
@@ -86,10 +86,99 @@ class Player(abc.ABC, pygame.sprite.Sprite):
         self.damage_cooldown = 10
         self.knockback_counter = self.health / 10
 
+
+    @abc.abstractmethod
+    def forward_aerial(self):
+        """
+        Abstract method for a character's smash attack. Defined on a per
+        character basis
+        """
+        pass
+
+    @abc.abstractmethod
+    def up_aerial(self):
+        """
+        Abstract method for a character's smash attack. Defined on a per
+        character basis
+        """
+        pass
+
     @abc.abstractmethod
     def up_smash(self):
         """
         Abstract method for a character's smash attack. Defined on a per
+        character basis
+        """
+        pass
+
+    @abc.abstractmethod
+    def down_aerial(self):
+        """
+        Abstract method for a character's smash attack. Defined on a per
+        character basis
+        """
+        pass
+
+    @abc.abstractmethod
+    def forward_tilt(self):
+        """
+        Abstract method for a character's smash attack. Defined on a per
+        character basis
+        """
+        pass
+
+    @abc.abstractmethod
+    def forward_smash(self):
+        """
+        Abstract method for a character's smash attack. Defined on a per
+        character basis
+        """
+        pass
+
+    @abc.abstractmethod
+    def down_smash(self):
+        """
+        Abstract method for a character's smash attack. Defined on a per
+        character basis
+        """
+        pass
+
+    @abc.abstractmethod
+    def forward_b(self):
+        """
+        Abstract method for a character's smash attack. Defined on a per
+        character basis
+        """
+        pass
+
+    @abc.abstractmethod
+    def up_b(self):
+        """
+        Abstract method for a character's smash attack. Defined on a per
+        character basis
+        """
+        pass
+
+    @abc.abstractmethod
+    def down_b(self):
+        """
+        Abstract method for a character's smash attack. Defined on a per
+        character basis
+        """
+        pass
+
+    @abc.abstractmethod
+    def up_smash(self):
+        """
+        Abstract method for a character's smash attack. Defined on a per
+        character basis
+        """
+        pass
+
+    @abc.abstractmethod
+    def up_tilt(self):
+        """
+        Abstract method for a character's tilt attack. Defined on a per
         character basis
         """
         pass
@@ -119,7 +208,7 @@ class Player(abc.ABC, pygame.sprite.Sprite):
         pass
 
     @abc.abstractmethod
-    def aerial(self):
+    def neutral_aerial(self):
         """
         Abstract method for a character's aerial attack. Defined on a per
         character basis
@@ -195,22 +284,22 @@ class Player(abc.ABC, pygame.sprite.Sprite):
             self.begin_jump()
 
 
-    def left(self):
+    def move_left(self):
         """
         Move the character left
         """
         self.acc.x = -self.speed
         # self.image = self.animate["move_left"]()
-        self.image = self.images["left"]
+        self.image = self.animate["move_left"]()
         self.direction = "left"
 
-    def right(self):
-        """
-        Move the character right
-        """
+    def move_right(self):
+        """,
+        Move, the character right
+        """,
         self.acc.x = self.speed
         # self.image = self.animate["move_right"]()
-        self.image = self.images["right"]
+        self.image = self.animate["move_right"]()
         self.direction = "right"
 
     def move(self):
@@ -232,8 +321,8 @@ class Player(abc.ABC, pygame.sprite.Sprite):
 
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
-            if self.attack_cooldown == 0 and self.direction == "left":
-                self.pos.x += 30
+            # if self.attack_cooldown == 0 and self.direction == "left":
+                # self.pos.x += 30
             
         self.character_image()
         self.set_boxes()
@@ -259,48 +348,93 @@ class Player(abc.ABC, pygame.sprite.Sprite):
          which character image to be displayed
         """
         if self.attack_cooldown > 0:
+            if self.attack == "jump":
+                if self.direction == "left":
+                    self.image = self.animate["jump_left"]()
+                else:
+                    self.image = self.animate["jump_right"]()
             if self.attack == "neutral_b":
                 if self.direction == "left":
-                    self.image = self.animate["n_b_l"]()
+                    self.image = self.animate["neutral_b_left"]()
                 else:
-                    self.image = self.animate["n_b_r"]()
-                if self.attack_cooldown == 0 and self.direction == "left":
-                    self.pos.x += 30
-            if self.attack == "side_tilt":
-                if self.direction == "left":
-                    self.image = self.animate["s_tilt_l"]()
-                else:
-                    self.image = self.animate["s_tilt_r"]()
-                if self.attack_cooldown == 0 and self.direction == "left":
-                    self.pos.x += 30
+                    self.image = self.animate["neutral_b_right"]()
             if self.attack == "neutral_tilt":
                 if self.direction == "left":
-                    self.image = self.animate["n_tilt_l"]()
+                    self.image = self.animate["neutral_tilt_left"]()
                 else:
-                    self.image = self.animate["n_tilt_r"]()
-                if self.attack_cooldown == 0 and self.direction == "left":
-                    self.pos.x += 30
+                    self.image = self.animate["neutral_tilt_right"]()
             if self.attack == "neutral_smash":
                 if self.direction == "left":
-                    self.image = self.animate["n_smash_l"]()
+                    self.image = self.animate["neutral_smash_left"]()
                 else:
-                    self.image = self.animate["n_smash_r"]()
-                if self.attack_cooldown == 0 and self.direction == "left":
-                    self.pos.x += 30
+                    self.image = self.animate["neutral_smash_right"]()
+            if self.attack == "neutral_aerial":
+                if self.direction == "left":
+                    self.image = self.animate["neutral_aerial_left"]()
+                else:
+                    self.image = self.animate["neutral_aerial_right"]()
+            if self.attack == "forward_aerial":
+                if self.direction == "left":
+                    self.image = self.animate["forward_aerial_left"]()
+                else:
+                    self.image = self.animate["forward_aerial_right"]()
+            if self.attack == "up_aerial":
+                if self.direction == "left":
+                    self.image = self.animate["up_aerial_left"]()
+                else:
+                    self.image = self.animate["up_aerial_right"]()
+            if self.attack == "down_aerial":
+                if self.direction == "left":
+                    self.image = self.animate["down_aerial_left"]()
+                else:
+                    self.image = self.animate["down_aerial_right"]()
+            if self.attack == "forward_tilt":
+                if self.direction == "left":
+                    self.image = self.animate["forward_tilt_left"]()
+                else:
+                    self.image = self.animate["forward_tilt_right"]()
+            if self.attack == "up_tilt":
+                if self.direction == "left":
+                    self.image = self.animate["up_tilt_left"]()
+                else:
+                    self.image = self.animate["up_tilt_right"]()
+            if self.attack == "down_tilt":
+                if self.direction == "left":
+                    self.image = self.animate["down_tilt_left"]()
+                else:
+                    self.image = self.animate["down_tilt_right"]()
+            if self.attack == "forward_smash":
+                if self.direction == "left":
+                    self.image = self.animate["forward_smash_left"]()
+                else:
+                    self.image = self.animate["forward_smash_right"]()
             if self.attack == "up_smash":
                 if self.direction == "left":
-                    self.image = self.animate["up_smash_l"]()
+                    self.image = self.animate["up_smash_left"]()
                 else:
-                    self.image = self.animate["up_smash_r"]()
-                if self.attack_cooldown == 0 and self.direction == "left":
-                    self.pos.x += 30
-            if self.attack == "aerial":
+                    self.image = self.animate["up_smash_right"]()
+            if self.attack == "down_smash":
                 if self.direction == "left":
-                    self.image = self.animate["aerial_l"]()
+                    self.image = self.animate["down_smash_left"]()
                 else:
-                    self.image = self.animate["aerial_r"]()
-                if self.attack_cooldown == 0 and self.direction == "left":
-                    self.pos.x += 30
+                    self.image = self.animate["down_smash_right"]()
+            if self.attack == "forward_b":
+                if self.direction == "left":
+                    self.image = self.animate["forward_b_left"]()
+                else:
+                    self.image = self.animate["forward_b_right"]()
+            if self.attack == "up_b":
+                if self.direction == "left":
+                    self.image = self.animate["up_b_left"]()
+                else:
+                    self.image = self.animate["up_b_right"]()
+            if self.attack == "down_b":
+                if self.direction == "left":
+                    self.image = self.animate["down_b_left"]()
+                else:
+                    self.image = self.animate["down_b_right"]()
+                # if self.attack_cooldown == 0 and self.direction == "left":
+                    # self.pos.x += 30
         elif round(self.vel.y) != 0:
             if self.direction == "right":
                 self.image = self.animate["jump_right"]()
@@ -313,6 +447,6 @@ class Player(abc.ABC, pygame.sprite.Sprite):
                 self.image = self.animate["move_left"]()
         else:
             if self.direction == "right":
-                self.image = self.animate["right"]()
+                self.image = self.animate["stand_right"]()
             else:
-                self.image = self.animate["left"]()
+                self.image = self.animate["stand_left"]()
